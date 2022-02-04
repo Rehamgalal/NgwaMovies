@@ -1,6 +1,5 @@
 package com.example.newsapp.di
 
-import android.app.Application
 import com.scan.ngwamovies.api.MoviesApi
 import com.scan.ngwamovies.other.Constants
 import dagger.Module
@@ -8,12 +7,13 @@ import dagger.Provides
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class AppModule(val application: Application) {
+class AppModule() {
 
     @Singleton
     @Provides
@@ -21,6 +21,7 @@ class AppModule(val application: Application) {
         return Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build()
     }
