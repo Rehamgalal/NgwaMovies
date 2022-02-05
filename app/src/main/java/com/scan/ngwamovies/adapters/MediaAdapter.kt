@@ -7,12 +7,14 @@ import com.scan.ngwamovies.databinding.MediaItemBinding
 import com.scan.ngwamovies.databinding.NetworkItemBinding
 import com.scan.ngwamovies.model.MediaItem
 import com.scan.ngwamovies.utils.NetworkState
+import com.scan.ngwamovies.utils.OnItemClicked
 
 class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val MEDIA_TYPE = 1
     private val ERROR_TYPE = 2
     private var networkState: NetworkState? = null
     private var mediaItems: List<MediaItem>? = null
+    private var listener:OnItemClicked ?= null
     fun setNetworkState(networkState: NetworkState) {
         this.networkState = networkState
     }
@@ -21,10 +23,13 @@ class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.mediaItems = articleList
         notifyDataSetChanged()
     }
+    fun setListener(listener:OnItemClicked) {
+        this.listener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == MEDIA_TYPE) {
-            ArticleItemViewHolder.create(parent)
+            ArticleItemViewHolder.create(parent,listener!!)
         } else {
             NetworkStateViewHolder.create(parent)
         }
@@ -55,22 +60,24 @@ class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return networkState != null && networkState != NetworkState.LOADED
     }
 
-    class ArticleItemViewHolder(private val view: MediaItemBinding) :
+    class ArticleItemViewHolder(private val view: MediaItemBinding,private val listener: OnItemClicked) :
         RecyclerView.ViewHolder(view.root) {
         fun bind(item: MediaItem) {
             view.item = item
-
+            itemView.setOnClickListener {
+                listener.onClick(item)
+            }
         }
 
         companion object {
-            fun create(parent: ViewGroup): ArticleItemViewHolder {
+            fun create(parent: ViewGroup,listener: OnItemClicked): ArticleItemViewHolder {
 
                 return ArticleItemViewHolder(
                     MediaItemBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ),listener
                 )
             }
         }

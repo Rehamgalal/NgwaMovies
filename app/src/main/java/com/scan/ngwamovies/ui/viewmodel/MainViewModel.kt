@@ -69,10 +69,15 @@ class MainViewModel(@NonNull application: Application) : AndroidViewModel(applic
     fun getNetworkState(): LiveData<NetworkState> {
         return networkState
     }
+    fun getDownLoadProcess(): LiveData<Long> {
+        return downloadProcess
+    }
 
     fun downloadVideo() {
-        compositeDisposable.add(intervalRange(0L, 50L, 10, 10, TimeUnit.MILLISECONDS,
-            AndroidSchedulers.mainThread()).subscribe { downloadProcess.postValue(it) })
+        compositeDisposable.add(intervalRange(0, 100, 60, 10, TimeUnit.MILLISECONDS,
+            AndroidSchedulers.mainThread()).subscribe {
+            downloadProcess.postValue(it)
+            })
     }
 
     private inline fun <reified T> readRawJson(@RawRes rawResId: Int): T {
