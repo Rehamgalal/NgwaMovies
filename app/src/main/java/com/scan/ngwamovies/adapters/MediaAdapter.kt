@@ -1,5 +1,6 @@
 package com.scan.ngwamovies.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +20,8 @@ class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.networkState = networkState
     }
 
-    fun setDataList(articleList: List<MediaItem>) {
-        this.mediaItems = articleList
+    fun setDataList(list: List<MediaItem>) {
+        this.mediaItems = list
         notifyDataSetChanged()
     }
     fun setListener(listener:OnItemClicked) {
@@ -29,7 +30,7 @@ class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == MEDIA_TYPE) {
-            ArticleItemViewHolder.create(parent,listener!!)
+            MediaViewHolder.create(parent,listener!!)
         } else {
             NetworkStateViewHolder.create(parent)
         }
@@ -37,14 +38,16 @@ class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            MEDIA_TYPE -> (holder as ArticleItemViewHolder).bind(mediaItems!![position])
+            MEDIA_TYPE -> (holder as MediaViewHolder).bind(mediaItems!![position])
             ERROR_TYPE -> (holder as NetworkStateViewHolder).bind(networkState!!)
         }
     }
 
     override fun getItemCount(): Int {
-        return if (mediaItems != null) mediaItems!!.size
-        else 1
+       return when{ mediaItems != null -> mediaItems!!.size
+           networkState!=null -> 1
+           else -> 0
+       }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -60,19 +63,34 @@ class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return networkState != null && networkState != NetworkState.LOADED
     }
 
-    class ArticleItemViewHolder(private val view: MediaItemBinding,private val listener: OnItemClicked) :
+    class MediaViewHolder(private val view: MediaItemBinding,private val listener: OnItemClicked) :
         RecyclerView.ViewHolder(view.root) {
         fun bind(item: MediaItem) {
             view.item = item
-            itemView.setOnClickListener {
-                listener.onClick(item)
+            if (item.downloaded){
+                view.downlaod.setBackgroundColor(Color.WHITE)
+                view.downlaod.setTextColor(Color.BLACK)
+                view.downlaod.text = "Downloaded"
+            }
+            else {
+                view.downlaod.setBackgroundColor(Color.MAGENTA)
+                view.downlaod.setTextColor(Color.WHITE)
+                view.downlaod.text = "Download"
+            }
+            view.downlaod.setOnClickListener {
+                if (!item.downloaded){
+                view.downlaod.setBackgroundColor(Color.WHITE)
+                view.downlaod.setTextColor(Color.BLACK)
+                view.downlaod.text = "Downloaded"
+                    item.downloaded = true
+                listener.onClick(item)}
             }
         }
 
         companion object {
-            fun create(parent: ViewGroup,listener: OnItemClicked): ArticleItemViewHolder {
+            fun create(parent: ViewGroup,listener: OnItemClicked): MediaViewHolder {
 
-                return ArticleItemViewHolder(
+                return MediaViewHolder(
                     MediaItemBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,

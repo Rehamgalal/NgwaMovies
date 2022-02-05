@@ -8,7 +8,7 @@ import com.scan.ngwamovies.R
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class MediaItem(val id:Int, val type:String, val url:String, val name:String):Parcelable
+data class MediaItem(val id:Int, val type:String, val url:String, val name:String,var downloaded:Boolean = false):Parcelable
 @BindingAdapter("imageUrl")
 fun loadImage(view: ImageView, item: String) {
     Glide.with(view.context)

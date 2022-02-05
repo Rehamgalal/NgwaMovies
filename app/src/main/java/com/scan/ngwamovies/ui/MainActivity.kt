@@ -1,6 +1,7 @@
 package com.scan.ngwamovies.ui
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
@@ -34,7 +35,6 @@ class MainActivity : AppCompatActivity(), OnItemClicked {
         val view = binding.root
         setContentView(view)
         initRecyclerView()
-        setDialogLayout()
         getData()
     }
 
@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity(), OnItemClicked {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(progressBinding.root)
+        val window = dialog.window
+        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
     }
     private fun getData() {
         viewModel.getRecyclerListObserver().observe(this, {
@@ -65,12 +67,12 @@ class MainActivity : AppCompatActivity(), OnItemClicked {
     }
 
     override fun onClick(item: MediaItem) {
-        dialog.show()
-        val window = dialog.window
-        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        setDialogLayout()
         viewModel.downloadVideo()
         progressBinding.name.text = item.name
         viewModel.getDownLoadProcess().observe(this, {
+            if (!dialog.isShowing) dialog.show()
+            progressBinding.precent.text = "${it}%"
             progressBinding.progressBar.progress = it.toInt()
             if (it== 99L) dialog.dismiss()
         })
