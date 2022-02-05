@@ -12,7 +12,6 @@ data class MediaItem(val id:Int, val type:String, val url:String, val name:Strin
 @BindingAdapter("imageUrl")
 fun loadImage(view: ImageView, item: String) {
     Glide.with(view.context)
-        .load(item)
+        .load(item).centerCrop()
         .placeholder(R.drawable.pdf)
-        .into(view)
-}
+        .into(view) }

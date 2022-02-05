@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.scan.ngwamovies.adapters.MediaAdapter
 import com.scan.ngwamovies.databinding.ActivityMainBinding
 import com.scan.ngwamovies.ui.viewmodel.MainViewModel
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,10 +36,10 @@ class MainActivity : AppCompatActivity() {
     private fun getData() {
         viewModel.getRecyclerListObserver().observe(this, {
             recyclerAdapter.setDataList(it)
+            recyclerAdapter.notifyDataSetChanged()
         })
         viewModel.getNetworkState().observe(this, {
             recyclerAdapter.setNetworkState(it)
-
         })
     }
 }
