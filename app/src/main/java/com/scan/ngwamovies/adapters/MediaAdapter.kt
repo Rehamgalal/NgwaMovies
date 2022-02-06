@@ -75,18 +75,10 @@ class MediaAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bind(item: MediaItem) {
             if (item.downloaded == null) item.downloaded = ObservableField("Download")
             view.item = item
-            view.downlaod.apply {
-                if (item.downloaded!!.get().equals("Download")) {
-                    setTextColor(Color.WHITE)
-                } else {
-                    setTextColor(Color.BLACK)
-                }
-            }
             view.downlaod.setOnClickListener {
                 if (item.downloaded!!.get().equals("Download")) {
                     view.downlaod.apply {
                         item.downloaded!!.set("Done")
-                        setTextColor(Color.BLACK)
                         listener.onClick(item)
                     }
                 }
