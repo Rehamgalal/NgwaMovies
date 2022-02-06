@@ -1,11 +1,11 @@
 package com.scan.ngwamovies.ui
 
 import android.app.Dialog
-import android.app.ProgressDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Window
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.scan.ngwamovies.adapters.MediaAdapter
@@ -53,9 +53,9 @@ class MainActivity : AppCompatActivity(), OnItemClicked {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(false)
         dialog.setContentView(progressBinding.root)
-        val window = dialog.window
-        window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
+
     private fun getData() {
         viewModel.getRecyclerListObserver().observe(this, {
             recyclerAdapter.setDataList(it)

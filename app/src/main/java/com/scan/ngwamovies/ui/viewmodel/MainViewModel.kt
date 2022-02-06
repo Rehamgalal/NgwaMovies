@@ -48,7 +48,6 @@ class MainViewModel(@NonNull application: Application) : AndroidViewModel(applic
                         liveDataList.postValue(it)
                         networkState.postValue(NetworkState.LOADED)
                     }, {
-
                         if (it.message.equals("HTTP 429 ")) {
                             liveDataList.postValue(readRawJson(R.raw.getlistoffilesresponse))
                             networkState.postValue(NetworkState.LOADED)
@@ -74,7 +73,7 @@ class MainViewModel(@NonNull application: Application) : AndroidViewModel(applic
     }
 
     fun downloadVideo() {
-        compositeDisposable.add(intervalRange(0, 100, 60, 10, TimeUnit.MILLISECONDS,
+        compositeDisposable.add(intervalRange(0, 100, 20, 100, TimeUnit.MILLISECONDS,
             AndroidSchedulers.mainThread()).subscribe {
             downloadProcess.postValue(it)
             })

@@ -8,20 +8,32 @@
     </data>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
         android:layout_margin="10dp"
         android:elevation="15dp"
-        app:cardBackgroundColor="@color/purple_200">
+        app:cardBackgroundColor="@color/magenta">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:layout_margin="7dp"
     >
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/image_view"
+        app:imageUrl="@{item.url}"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="@id/downlaod"
+    app:layout_constraintStart_toStartOf="@id/downlaod"
+    app:layout_constraintBottom_toTopOf="@id/downlaod"
+    app:layout_constraintVertical_chainStyle="spread"
     app:layout_constraintTop_toTopOf="parent"
     android:layout_marginStart="20dp"
     android:id="@+id/name"
@@ -29,25 +41,18 @@
     android:textColor="@color/black"
     android:textStyle="bold"
     android:textSize="16sp"/>
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="150dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/image_view"
-        app:imageUrl="@{item.url}"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/download"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="@{item.downloaded}"
         android:textAllCaps="false"
         android:id="@+id/downlaod"
-        android:background="@color/magenta"
+        android:textSize="12sp"
+        android:background="@color/teal_200"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_view"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
